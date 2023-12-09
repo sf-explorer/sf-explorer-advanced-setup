@@ -1,0 +1,45 @@
+:root {
+	--red-by-github: #cb2431;
+	min-width: 400px;
+}
+
+small {
+	display: block;
+}
+
+#errorMessage {
+	color: var(--red-by-github);
+}
+#errorMessage:not(:empty) + small {
+	display: none;
+}
+
+textarea {
+	resize: vertical;
+}
+
+textarea:invalid {
+	border-color: var(--red-by-github);
+	box-shadow: inset 0 0 10px var(--red-by-github);
+}
+
+h2:not(:first-child) {
+	margin-top: 2em;
+}
+
+/* Style by GitHub */
+code {
+	padding: 0;
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+	margin: 0;
+	background-color: rgba(27,31,35,0.05);
+	border-radius: 3px;
+	color: black;
+}
+
+.monospace-text {
+	font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+	font-size: 11px;
+	line-height: 1.5;
+}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>SF Explorer - Enhanced Setup</title>
+		<link rel="stylesheet" href="webext-base.css">
+		<link rel="stylesheet" href="options.css">
+	</head>
+	<form>
+		<h2>Style</h2>
+		<p>
+			<label>
+				<input name="filesPreview" type="radio" value="true">
+				<label>On</label>
+			</label>
+		</p>
+		<p>
+			<label>
+				<input name="filesPreview" type="radio" value="false">
+				<label>Off</label>
+			</label>
+		</p>
+		<h2>Permission Set Message</h2>
+		<textarea id="hideRegExp" class="monospace-text"></textarea>
+		<small id="errorMessage"></small>
+		<small>Leave empty to restore the defaults.</small>
+		<script src="options.js"></script>
+	</form>
+</html>
