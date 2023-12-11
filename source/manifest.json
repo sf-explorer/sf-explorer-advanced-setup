@@ -1,6 +1,6 @@
 {
-	"name": "SF Explorer - Enhanced Setup",
-	"version": "0.0.1",
+	"name": "Salesforce Explorer - Enhanced Setup",
+	"version": "0.0.2",
 	"description": "Enhance your Salesforce setup with checks and best practices",
 	"homepage_url": "https://sf-explorer.github.io/documentation/",
 	"manifest_version": 3,

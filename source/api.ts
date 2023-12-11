@@ -1,8 +1,6 @@
 export const defaults = {
-	filesPreview: true,
-	hideRegExp: `
-	Please follow DA convention for PSet naming!
-	`.replace(/\n\t+/g, '\n').trim()
+	psetMessage: `Please follow project convention`,
+	newCustomMessage:`Please follow project convention`
 };
 
 export const storage = {
@@ -23,7 +21,7 @@ export function getSessionId(): string {
 	return sfCookies.length > 0 && sfCookies[1] ? sfCookies[1] : ''
 }
 
-export async function  sf_fetch(){
-	const res= await fetch('/services/data/v40.0/limits/', { method: "GET", headers: { 'Authorization': 'Bearer ' + getSessionId() }})
+export async function sf_fetch(url = '/services/data/v40.0/limits/') {
+	const res = await fetch(url, { method: "GET", headers: { 'Authorization': 'Bearer ' + getSessionId() } })
 	return res.json()
 }
