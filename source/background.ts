@@ -45,7 +45,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.message == "getSession") {
-    debugger
     chrome.cookies.get({ url: "https://" + request.sfHost, name: request.cookieName || "sid", storeId: cookieStoreId(sender.tab) }, sessionCookie => {
       if (!sessionCookie) {
         sendResponse(null)

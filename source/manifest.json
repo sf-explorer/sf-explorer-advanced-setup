@@ -1,6 +1,6 @@
 {
 	"name": "Salesforce Explorer - Enhanced Setup",
-	"version": "0.0.3",
+	"version": "0.0.5",
 	"description": "Enhance your Salesforce setup with checks and best practices",
 	"homepage_url": "https://sf-explorer.github.io/documentation/",
 	"manifest_version": 3,
@@ -27,6 +27,8 @@
 				"https://*.salesforce.com/*01I*",
 				"https://*.salesforce.com/*newPermissionSet*",
 				"https://*.force.com/*CustomObjects*",
+				"https://*.force.com/00N*",
+				"https://*.force.com/*FieldsAndRelationships*",
 				"https://*.cloudforce.com/*CustomObjects*",
 				"https://*.salesforce.com/*NewCustomFieldStageManager*",
 				"https://*.force.com/*NewCustomFieldStageManager*",
