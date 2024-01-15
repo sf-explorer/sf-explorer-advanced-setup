@@ -37,7 +37,7 @@
 				"https://*.force.com/*101*",
 				"https://*.cloudforce.com/*101*"
 			],
-			"js": ["setup-enhance.js", "force.min.js"],
+			"js": ["setup-enhance.js"],
 			"all_frames": true
 		}
 	]

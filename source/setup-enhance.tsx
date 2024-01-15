@@ -132,7 +132,7 @@ async function updateUINewField(settings: any) {
 	if (!entityId) return
 
 	const force = await jsforce()
-	const res = await force.tooling.query(`SELECT DeveloperName, Label, DataType, Description
+	const res = await force.tooling.query<any>(`SELECT DeveloperName, Label, DataType, Description
 		FROM FieldDefinition  where entityDefinition.DurableId = '${entityId}' order by LastModifiedDate desc limit 400 `)
 
 	let data = stage === '1' ? res.records : []
@@ -196,9 +196,9 @@ async function updateUIExistingField() {
 	let variableId = window.location.pathname.replace('/', '')
 
 	const force = await jsforce()
-	const res = await force.tooling.query(`SELECT DeveloperName, Label, DataType, Description
+	const res = await force.tooling.query<any>(`SELECT DeveloperName, Label, DataType, Description
 		FROM FieldDefinition  where entityDefinition.DurableId = '${entityId}' order by LastModifiedDate desc limit 400 `)
-	const resField = await force.tooling.query(`SELECT DeveloperName from CustomField where Id = '${variableId}' limit 1 `)
+	const resField = await force.tooling.query<any>(`SELECT DeveloperName from CustomField where Id = '${variableId}' limit 1 `)
 
 	const fieldAPIName = resField.records[0]?.DeveloperName
 	if (!fieldAPIName) return
