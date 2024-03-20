@@ -2,8 +2,7 @@
 import fitTextarea from 'fit-textarea';
 import {storage, defaults} from './api';
 
-const newCustomMessage = document.querySelector<HTMLTextAreaElement>('#newCustomMessage')!
-const psetMessage = document.querySelector<HTMLTextAreaElement>('#psetMessage')!
+const rulesConfiguration = document.querySelector<HTMLTextAreaElement>('#rulesConfiguration')!
 const errorMessage = document.querySelector('#errorMessage')!
 
 void restoreOptions();
@@ -24,17 +23,16 @@ function saveOptions(): void {
 	//const previewField = document.querySelector<HTMLInputElement>('[name="filesPreview"]:checked')!;
 
 	storage.set({
-		psetMessage: psetMessage.value.trim() || defaults.psetMessage,
-		newCustomMessage: newCustomMessage.value.trim() || defaults.newCustomMessage,
+		psetMessage: defaults.psetMessage,
+		rulesConfiguration: rulesConfiguration.value.trim() || defaults.rulesConfiguration,
 	})
 }
 
 async function restoreOptions(): Promise<void> {
 	const items = await storage.get()
 	//const previewField = document.querySelector<HTMLInputElement>(`[name="filesPreview"][value="${String(items.filesPreview)}"]`)!;
-	psetMessage.value = items.psetMessage
-	newCustomMessage.value = items.newCustomMessage
+	rulesConfiguration.value = items.rulesConfiguration
 	//previewField.checked = true;
 
-	fitTextarea.watch(psetMessage)
+	fitTextarea.watch(rulesConfiguration)
 }

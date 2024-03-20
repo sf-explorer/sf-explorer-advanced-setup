@@ -81,13 +81,13 @@ async function updateUINewPset(settings: any) {
 	title[0]?.after(lastModified(settings))
 }
 
-function updateUINewObject(settings: any): void {
+function updateUINewObject(): void {
 	const masterLabelInput = select.all("[id='MasterLabel']")
 	const descriptionTextArea = select.last("[id='Description']")
-	const title = select.all("[id='head_1_ep']")
+	/*const title = select.all("[id='head_1_ep']")
 	title[0]?.after(
 		<p className="brandTertiaryBgr first pbSubheader tertiaryPalette" style={{ padding: '10px' }}>{settings.newCustomMessage}</p>
-	)
+	)*/
 	if (masterLabelInput.length === 1 && masterLabelInput[0]) {
 	}
 
@@ -106,10 +106,19 @@ function showSimilarFields(name: string, fields: Field[]) {
 		}
 	}).filter(field => field.similarity > 0.6).sort((a, b) => b.similarity - a.similarity)
 	return similar
-
 }
 
-async function updateUINewField(settings: any) {
+async function getRule(sObject: string, field: string){
+	const settings = await storage.get()
+	try {
+		const rules = JSON.parse(settings.rulesConfiguration)
+		return rules.find((rule: any) => rule.sObject === sObject && rule.field === field)
+	} catch (e){
+
+	}
+}
+
+async function updateUINewField() {
 	const masterLabelInput: HTMLInputElement | undefined = select.last("[id='MasterLabel']")
 	const apiNameInput: HTMLInputElement | undefined = select.last("[id='DeveloperName']")
 	const descriptionTextArea = select.last("[id='Description']")
@@ -118,12 +127,19 @@ async function updateUINewField(settings: any) {
 	const stage = select.last("[id='currentStage']")?.getAttribute("value")
 
 	const title = select.all("[class='pbWizardHeader']")
-	title[0]?.after(
-		<p className="brandTertiaryBgr first pbSubheader tertiaryPalette" style={{ padding: '10px' }}>{settings.newCustomMessage}</p>
+	const ruleName = await getRule('CustomField', 'DeveloperName')
+	const ruleDesc = await getRule('CustomField', 'Description')
+
+	ruleName?.goodExample && title[0]?.after(
+		<p className="brandTertiaryBgr first pbSubheader tertiaryPalette" style={{ padding: '10px' }}>Good example: {ruleName.goodExample}</p>
+	)
+	ruleName?.message && title[0]?.after(
+		<p className="brandTertiaryBgr first pbSubheader tertiaryPalette" style={{ padding: '10px' }}>{ruleName.message}</p>
 	)
 
-	apiNameInput?.setAttribute('placeholder', 'PascalCase and in English')
-	descriptionTextArea?.setAttribute('placeholder', 'Please provide a description, otherwise you will not be able to promote this metadata!')
+	ruleName && apiNameInput?.setAttribute('placeholder', ruleName.message)
+
+	ruleDesc && descriptionTextArea?.setAttribute('placeholder', ruleDesc.message)
 
 	if (stage === '0') return
 
@@ -132,8 +148,9 @@ async function updateUINewField(settings: any) {
 	if (!entityId) return
 
 	const force = await jsforce()
-	const res = await force.tooling.query<any>(`SELECT DeveloperName, Label, DataType, Description
-		FROM FieldDefinition  where entityDefinition.DurableId = '${entityId}' order by LastModifiedDate desc limit 400 `)
+	if (!force) return
+	const res = await force.tooling.query(`SELECT DeveloperName, Label, DataType, Description
+		FROM FieldDefinition  where entityDefinition.DurableId = '${entityId}' order by LastModifiedDate desc limit 400 `) as any
 
 	let data = stage === '1' ? res.records : []
 
@@ -196,9 +213,10 @@ async function updateUIExistingField() {
 	let variableId = window.location.pathname.replace('/', '')
 
 	const force = await jsforce()
-	const res = await force.tooling.query<any>(`SELECT DeveloperName, Label, DataType, Description
-		FROM FieldDefinition  where entityDefinition.DurableId = '${entityId}' order by LastModifiedDate desc limit 400 `)
-	const resField = await force.tooling.query<any>(`SELECT DeveloperName from CustomField where Id = '${variableId}' limit 1 `)
+	if (!force) return
+	const res = await force?.tooling.query(`SELECT DeveloperName, Label, DataType, Description
+		FROM FieldDefinition  where entityDefinition.DurableId = '${entityId}' order by LastModifiedDate desc limit 400 `) as any
+	const resField = await force.tooling.query(`SELECT DeveloperName from CustomField where Id = '${variableId}' limit 1 `) as any
 
 	const fieldAPIName = resField.records[0]?.DeveloperName
 	if (!fieldAPIName) return
@@ -218,12 +236,12 @@ async function init(): Promise<void> {
 	const settings = await storage.get()
 	const pathName = window.location.pathname
 	if (pathName.startsWith('/01I/')) {
-		updateUINewObject(settings)
+		updateUINewObject()
 	} else if (pathName.indexOf('PermissionSet/newPermissionSet') > -1) {
 		// /udd/PermissionSet/newPermissionSet.apexp
 		updateUINewPset(settings)
 	} else if (pathName.indexOf('/NewCustomFieldStageManager') > -1) {
-		updateUINewField(settings)
+		updateUINewField()
 		// https://cunning-moose-rkyt30-dev-ed.trailblaze.my.salesforce.com/p/setup/field/NewCustomFieldStageManager?isdtp=p1
 	} else if (pathName.startsWith('/00N')) {
 		console.log(pathName)
