@@ -43,11 +43,11 @@ export async function jsforce(): Promise<Connection> {
 	return new (window as any).jsforce.Connection({
 		instanceUrl: window.location.origin,
 		accessToken: sessionId,
-		version: '59.0',
+		version: '60.0',
 	}) as any
 }
 
-export async function sf_fetch(url = '/services/data/v40.0/limits/') {
+export async function sf_fetch(url = '/services/data/v60.0/limits/') {
 	const res = await fetch(url, { method: "GET" })
 	return res.json()
 }

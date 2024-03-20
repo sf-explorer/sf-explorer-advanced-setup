@@ -6,6 +6,11 @@
 		"watch": "webpack --mode=development --watch",
 		"zip": "cd distribution && zip -r dist.zip *"
 	},
+	"author": {
+		"email": "ndespres@gmail.com",
+		"name": "Nicolas Despres"
+	},
+	"license": "MIT",
 	"dependencies": {
 		"dom-chef": "^5.0.0-1",
 		"element-ready": "^5.0.0",
