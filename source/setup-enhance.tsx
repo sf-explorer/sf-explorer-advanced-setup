@@ -4,6 +4,7 @@ import select from 'select-dom';
 
 import { jsforce, storage } from './api'
 import stringSimilarity from 'string-similarity-js';
+import index from './index.json'
 
 const handleClick = (open: boolean, settings: any) => () => {
 	storage.set({
@@ -214,9 +215,58 @@ async function updateUIExistingField() {
 	}
 }
 
+// Helper function to wait for an element to be available
+function waitForElement(selector: () => Element | undefined, timeout = 5000): Promise<Element | undefined> {
+	return new Promise((resolve) => {
+		const startTime = Date.now()
+
+		const checkElement = () => {
+			const element = selector()
+			if (element) {
+				resolve(element)
+				return
+			}
+
+			if (Date.now() - startTime > timeout) {
+				console.warn('Element not found within timeout')
+				resolve(undefined)
+				return
+			}
+
+			setTimeout(checkElement, 100)
+		}
+
+		checkElement()
+	})
+}
+
+async function addObjectDescription(objectName: string) {
+	const data = index.objects as any
+	const obj = data[objectName]
+	if (obj?.description) {
+		// Wait for the Description label span to be available
+		const descriptionLabel = await waitForElement(() =>
+			Array.from(document.querySelectorAll('span.slds-form-element__label'))
+				.find(span => span.textContent?.trim() === 'Description') as HTMLElement | undefined
+		) as HTMLElement | undefined
+
+		if (descriptionLabel) {
+			// Add the description text after the label
+			descriptionLabel.after(
+				<div style={{ marginTop: '5px', padding: '10px', backgroundColor: '#f3f3f3', borderRadius: '4px' }}>
+					{obj.description}
+				</div>
+			)
+		}
+	}
+}
+
 async function init(): Promise<void> {
 	const settings = await storage.get()
+
+
 	const pathName = window.location.pathname
+	console.log('Path Name:', pathName)
 	if (pathName.startsWith('/01I/')) {
 		updateUINewObject(settings)
 	} else if (pathName.indexOf('PermissionSet/newPermissionSet') > -1) {
@@ -224,10 +274,17 @@ async function init(): Promise<void> {
 		updateUINewPset(settings)
 	} else if (pathName.indexOf('/NewCustomFieldStageManager') > -1) {
 		updateUINewField(settings)
-		// https://cunning-moose-rkyt30-dev-ed.trailblaze.my.salesforce.com/p/setup/field/NewCustomFieldStageManager?isdtp=p1
 	} else if (pathName.startsWith('/00N')) {
 		console.log(pathName)
 		updateUIExistingField()
+	} else if (pathName.match(/^\/lightning\/setup\/ObjectManager\/([^\/]+)\/Details\/view$/)) {
+		const match = pathName.match(/^\/lightning\/setup\/ObjectManager\/([^\/]+)\/Details\/view$/)
+		const objectName = match ? match[1] : null
+		if (objectName) {
+			await addObjectDescription(objectName)
+		}
+		//updateUIExistingField()
+
 		// https://cunning-moose-rkyt30-dev-ed.trailblaze.my.salesforce.com/p/setup/field/NewCustomFieldStageManager?isdtp=p1
 	}
 
@@ -235,4 +292,15 @@ async function init(): Promise<void> {
 
 }
 
+// Run init on initial load
 void init();
+
+// Listen for URL changes (for SPA navigation)
+let lastUrl = location.href;
+new MutationObserver(() => {
+	const url = location.href;
+	if (url !== lastUrl) {
+		lastUrl = url;
+		void init();
+	}
+}).observe(document, { subtree: true, childList: true });

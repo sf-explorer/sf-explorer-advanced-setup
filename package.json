@@ -12,6 +12,7 @@
 	},
 	"license": "MIT",
 	"dependencies": {
+		"@sf-explorer/salesforce-object-reference": "^1.0.2",
 		"dom-chef": "^5.0.0-1",
 		"element-ready": "^5.0.0",
 		"fit-textarea": "^3.0.0",
