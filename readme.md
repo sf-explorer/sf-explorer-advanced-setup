@@ -64,7 +64,61 @@ A Chrome/Edge extension that enhances your Salesforce setup experience with inte
    - Click "Load unpacked"
    - Select the `distribution` folder
 
-## 🔧 Development
+## 🏗️ Architecture
+
+This extension uses a modular architecture where each use case has its own dedicated content script:
+
+### Content Scripts
+
+- **`permission-set-new.tsx`**: Handles new permission set creation pages
+  - Shows last modified permission sets
+  - Enforces description requirements
+  - Displays custom guidelines
+
+- **`custom-object-new.tsx`**: Handles new custom object creation pages
+  - Shows custom messages
+  - Enforces description requirements
+
+- **`custom-field-new.tsx`**: Handles new custom field wizard
+  - Auto-converts labels to PascalCase
+  - Detects duplicate/similar fields
+  - Shows last modified fields
+  - Enforces best practices
+
+- **`custom-field-existing.tsx`**: Handles existing custom field pages
+  - Shows similar fields warning
+  - Prevents accidental duplicates
+
+- **`object-manager-details.tsx`**: Handles Object Manager detail views
+  - Adds official Salesforce object descriptions
+  - Provides instant documentation
+
+- **`object-manager-list.tsx`**: Handles Object Manager list page
+  - Populates description column for all objects
+  - Uses comprehensive object reference library
+
+- **`utils.tsx`**: Shared utilities
+  - `toPascalCase()`: String conversion utility
+  - `showSimilarFields()`: Similarity matching algorithm
+  - `waitForElement()`: DOM element waiting helper
+
+### Routing
+
+The Chrome manifest (`manifest.json`) handles routing based on URL patterns:
+
+- URL pattern matching ensures the right script loads for each page
+- All routing is handled declaratively in the manifest
+- No runtime routing logic needed in the scripts
+
+### Benefits of This Architecture
+
+1. **Performance**: Only loads the code needed for each specific page
+2. **Maintainability**: Each use case is isolated and easy to modify
+3. **Clarity**: Clear separation of concerns
+4. **Bundle Size**: Smaller individual bundles instead of one large file
+5. **Testing**: Easy to test each use case independently
+
+
 
 ### Prerequisites
 - Node.js (v14 or higher)

@@ -4,7 +4,8 @@
 		"test": "npm run build && xo",
 		"build": "webpack --mode=production",
 		"watch": "webpack --mode=development --watch",
-		"zip": "cd distribution && zip -r dist.zip *"
+		"zip": "cd distribution && zip -r ../sf-explorer-setup-v$(node -p \"require('./source/manifest.json').version\").zip * -x '*.map'",
+		"build:zip": "npm run build && npm run zip"
 	},
 	"author": {
 		"email": "ndespres@gmail.com",

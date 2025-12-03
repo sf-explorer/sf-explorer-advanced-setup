@@ -13,9 +13,14 @@ module.exports = (_environment: string, argv: Record<string, boolean | number | 
 		builtAt: true
 	},
 	entry: Object.fromEntries([
-		'setup-enhance',
 		'background',
-		'options'
+		'options',
+		'permission-set-new',
+		'custom-object-new',
+		'custom-field-new',
+		'custom-field-existing',
+		'object-manager-details',
+		'object-manager-list'
 	].map(name => [name, `./source/${name}`])),
 	output: {
 		path: path.join(__dirname, 'distribution'),

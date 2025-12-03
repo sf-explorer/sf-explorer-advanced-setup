@@ -1,6 +1,6 @@
 {
 	"name": "Salesforce Explorer - Enhanced Setup",
-	"version": "0.0.6",
+	"version": "0.1.0",
 	"description": "Enhance your Salesforce setup with checks and best practices",
 	"homepage_url": "https://sf-explorer.github.io/documentation/",
 	"manifest_version": 3,
@@ -27,23 +27,66 @@
 	"content_scripts": [
 		{
 			"matches": [
-				"https://*.salesforce.com/*CustomObjects*",
-				"https://*.salesforce-setup.com/*",
-				"https://*.salesforce.com/*01I*",
-				"https://*.salesforce.com/*newPermissionSet*",
-				"https://*.force.com/*CustomObjects*",
-				"https://*.force.com/00N*",
-				"https://*.force.com/*FieldsAndRelationships*",
-				"https://*.cloudforce.com/*CustomObjects*",
-				"https://*.salesforce.com/*NewCustomFieldStageManager*",
-				"https://*.force.com/*NewCustomFieldStageManager*",
-				"https://*.cloudforce.com/*NewCustomFieldStageManager*",
-				"https://*.salesforce.com/*101*",
-				"https://*.force.com/*101*",
-				"https://*.cloudforce.com/*101*"
+				"https://*.salesforce.com/*newPermissionSet*"
 			],
 			"js": [
-				"setup-enhance.js"
+				"permission-set-new.js"
+			],
+			"all_frames": true
+		},
+		{
+			"matches": [
+				"https://*.salesforce.com/*01I*",
+				"https://*.salesforce.com/*CustomObjects*",
+				"https://*.force.com/*CustomObjects*",
+				"https://*.cloudforce.com/*CustomObjects*"
+			],
+			"js": [
+				"custom-object-new.js"
+			],
+			"all_frames": true
+		},
+		{
+			"matches": [
+				"https://*.salesforce.com/*NewCustomFieldStageManager*",
+				"https://*.force.com/*NewCustomFieldStageManager*",
+				"https://*.cloudforce.com/*NewCustomFieldStageManager*"
+			],
+			"js": [
+				"custom-field-new.js"
+			],
+			"all_frames": true
+		},
+		{
+			"matches": [
+				"https://*.force.com/00N*",
+				"https://*.salesforce.com/00N*",
+				"https://*.cloudforce.com/00N*"
+			],
+			"js": [
+				"custom-field-existing.js"
+			],
+			"all_frames": true
+		},
+		{
+			"matches": [
+				"https://*.salesforce-setup.com/lightning/setup/ObjectManager/*/Details/view",
+				"https://*.force.com/lightning/setup/ObjectManager/*/Details/view",
+				"https://*.salesforce.com/lightning/setup/ObjectManager/*/Details/view"
+			],
+			"js": [
+				"object-manager-details.js"
+			],
+			"all_frames": true
+		},
+		{
+			"matches": [
+				"https://*.salesforce-setup.com/lightning/setup/ObjectManager/home",
+				"https://*.force.com/lightning/setup/ObjectManager/home",
+				"https://*.salesforce.com/lightning/setup/ObjectManager/home"
+			],
+			"js": [
+				"object-manager-list.js"
 			],
 			"all_frames": true
 		}
